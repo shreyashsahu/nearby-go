@@ -1,0 +1,389 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile with saved addresses and active portal preference.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "activePortal": { "type": "string", "enum": ["CUSTOMER", "SELLER", "DELIVERY", "ADMIN"] },
+        "savedAddresses": { "type": "array" },
+        "walletBalanceInr": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "email", "activePortal", "createdAt", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authorized Super Admin registry entry.",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string" },
+        "email": { "type": "string" },
+        "grantedBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminId", "email", "grantedBy", "createdAt"]
+    },
+    "Store": {
+      "title": "Store",
+      "description": "Hyperlocal merchant storefront with location and approval status.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["GROCERY", "FOOD", "MEDICINES", "LOCAL_SHOP"] },
+        "description": { "type": "string" },
+        "address": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "openingHours": { "type": "string" },
+        "isOpen": { "type": "boolean" },
+        "autoAcceptOrders": { "type": "boolean" },
+        "approvalStatus": { "type": "string", "enum": ["PENDING", "APPROVED", "SUSPENDED"] },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "integer" },
+        "bannerImageKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "category", "address", "approvalStatus", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Catalog product belonging to a store with stock and discount pricing.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "priceInr": { "type": "number" },
+        "discountPercent": { "type": "integer" },
+        "stockCount": { "type": "integer" },
+        "isAvailable": { "type": "boolean" },
+        "imageUrl": { "type": "string" },
+        "unitLabel": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["storeId", "ownerId", "name", "category", "priceInr", "stockCount", "isAvailable", "createdAt", "updatedAt"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "Item inside a customer's shopping cart.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "productName": { "type": "string" },
+        "unitPriceInr": { "type": "number" },
+        "discountPercent": { "type": "integer" },
+        "quantity": { "type": "integer" },
+        "unitLabel": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "storeId", "productName", "unitPriceInr", "quantity", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Hyperlocal order lifecycle document with fee breakdown and settlement status.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "deliveryPartnerId": { "type": "string" },
+        "deliveryPartnerName": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["PLACED", "ACCEPTED", "PREPARING", "READY", "ASSIGNED", "PICKED_UP", "OUT_FOR_DELIVERY", "DELIVERED", "REJECTED", "CANCELLED", "REFUND_PENDING", "REFUNDED"]
+        },
+        "paymentMethod": { "type": "string" },
+        "paymentStatus": { "type": "string" },
+        "paymentReference": { "type": "string" },
+        "subtotalInr": { "type": "number" },
+        "discountInr": { "type": "number" },
+        "deliveryFeeInr": { "type": "number" },
+        "totalInr": { "type": "number" },
+        "distanceMeters": { "type": "integer" },
+        "deliveryAddress": { "type": "string" },
+        "couponCode": { "type": "string" },
+        "itemsSummary": { "type": "array" },
+        "timelineEvents": { "type": "array" },
+        "sellerEarningInr": { "type": "number" },
+        "deliveryEarningInr": { "type": "number" },
+        "platformCommissionInr": { "type": "number" },
+        "platformNetInr": { "type": "number" },
+        "settlementStatus": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "sellerId", "storeId", "status", "paymentMethod", "paymentStatus", "subtotalInr", "deliveryFeeInr", "totalInr", "deliveryAddress", "createdAt", "updatedAt"]
+    },
+    "DeliveryPartner": {
+      "title": "DeliveryPartner",
+      "description": "Delivery partner profile, verification state, live GPS coordinates, and availability.",
+      "type": "object",
+      "properties": {
+        "partnerId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "vehicleType": { "type": "string" },
+        "approvalStatus": { "type": "string", "enum": ["PENDING", "APPROVED", "SUSPENDED"] },
+        "isOnline": { "type": "boolean" },
+        "isBusy": { "type": "boolean" },
+        "activeOrderId": { "type": "string" },
+        "currentLat": { "type": "number" },
+        "currentLng": { "type": "number" },
+        "completedDeliveries": { "type": "integer" },
+        "totalEarningsInr": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["partnerId", "name", "vehicleType", "approvalStatus", "isOnline", "isBusy", "createdAt", "updatedAt"]
+    },
+    "DeliveryAssignment": {
+      "title": "DeliveryAssignment",
+      "description": "Audit log of delivery dispatch offers, acceptances, rejections, and completions.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "partnerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "status": { "type": "string", "enum": ["OFFERED", "ACCEPTED", "REJECTED", "PICKED_UP", "COMPLETED"] },
+        "rejectionReason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "partnerId", "sellerId", "customerId", "status", "createdAt", "updatedAt"]
+    },
+    "PaymentRecord": {
+      "title": "PaymentRecord",
+      "description": "Immutable financial record of customer payment collection and refund state.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "amountInr": { "type": "number" },
+        "method": { "type": "string" },
+        "gatewayMode": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "VERIFIED", "FAILED", "REFUND_PENDING", "REFUNDED"] },
+        "providerReference": { "type": "string" },
+        "idempotencyKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "customerId", "sellerId", "amountInr", "method", "status", "idempotencyKey", "createdAt", "updatedAt"]
+    },
+    "SettlementRecord": {
+      "title": "SettlementRecord",
+      "description": "Seller and Delivery Partner disbursement ledger record.",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string" },
+        "recipientRole": { "type": "string", "enum": ["SELLER", "DELIVERY"] },
+        "orderId": { "type": "string" },
+        "grossAmountInr": { "type": "number" },
+        "commissionInr": { "type": "number" },
+        "netPayableInr": { "type": "number" },
+        "payoutMode": { "type": "string", "enum": ["MANUAL", "AUTOMATIC"] },
+        "status": { "type": "string", "enum": ["PENDING", "PAID", "FAILED"] },
+        "paymentReference": { "type": "string" },
+        "idempotencyKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["recipientId", "recipientRole", "orderId", "netPayableInr", "payoutMode", "status", "idempotencyKey", "createdAt", "updatedAt"]
+    },
+    "PayoutAccount": {
+      "title": "PayoutAccount",
+      "description": "Seller or delivery partner masked payout destination and KYC verification status.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["SELLER", "DELIVERY"] },
+        "accountHolderName": { "type": "string" },
+        "maskedDestination": { "type": "string" },
+        "ifscCode": { "type": "string" },
+        "kycStatus": { "type": "string", "enum": ["PENDING", "VERIFIED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "accountHolderName", "maskedDestination", "kycStatus", "createdAt", "updatedAt"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Promotional discount campaign managed by Super Admin.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "title": { "type": "string" },
+        "discountType": { "type": "string", "enum": ["FLAT", "PERCENT"] },
+        "discountValue": { "type": "number" },
+        "minOrderInr": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "title", "discountType", "discountValue", "minOrderInr", "isActive", "createdAt", "updatedAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Customer rating and review for a delivered order and store.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string" },
+        "storeId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "storeId", "customerId", "rating", "createdAt"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "Private customer complaint visible strictly to the customer author and Super Admin.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "orderId": { "type": "string" },
+        "subject": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["OPEN", "IN_REVIEW", "RESOLVED"] },
+        "adminResolutionNote": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "subject", "description", "status", "createdAt", "updatedAt"]
+    },
+    "UserNotification": {
+      "title": "UserNotification",
+      "description": "Real-time user notification for order and settlement events.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "orderId": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "message", "isRead", "createdAt"]
+    },
+    "PlatformSettings": {
+      "title": "PlatformSettings",
+      "description": "Global platform configuration for delivery pricing, payment modes, and commissions.",
+      "type": "object",
+      "properties": {
+        "onlinePaymentsEnabled": { "type": "boolean" },
+        "codEnabled": { "type": "boolean" },
+        "settlementMode": { "type": "string", "enum": ["MANUAL", "AUTOMATIC"] },
+        "platformCommissionPercent": { "type": "number" },
+        "sellerPayoutPercent": { "type": "number" },
+        "deliveryBaseFeeInr": { "type": "number" },
+        "deliveryPer500mInr": { "type": "number" },
+        "minPayoutThresholdInr": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["onlinePaymentsEnabled", "codEnabled", "settlementMode", "platformCommissionPercent", "sellerPayoutPercent", "deliveryBaseFeeInr", "deliveryPer500mInr", "minPayoutThresholdInr", "updatedAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable Super Admin audit trail record.",
+      "type": "object",
+      "properties": {
+        "actorId": { "type": "string" },
+        "actorEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "targetType": { "type": "string" },
+        "targetId": { "type": "string" },
+        "details": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actorId", "action", "targetType", "targetId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Owner-isolated user profile documents."
+    },
+    "/users/{userId}/cart/{itemId}": {
+      "schema": { "$ref": "#/entities/CartItem" },
+      "description": "User-scoped shopping cart items."
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/UserNotification" },
+      "description": "User-scoped order and system notifications."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Controlled Super Admin access registry."
+    },
+    "/stores/{storeId}": {
+      "schema": { "$ref": "#/entities/Store" },
+      "description": "Seller stores and approval states."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Store product catalog and inventory."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Orders shared across customer, seller, assigned delivery partner, and Super Admin."
+    },
+    "/deliveryPartners/{partnerId}": {
+      "schema": { "$ref": "#/entities/DeliveryPartner" },
+      "description": "Delivery partner status, verification, and location."
+    },
+    "/deliveryAssignments/{assignmentId}": {
+      "schema": { "$ref": "#/entities/DeliveryAssignment" },
+      "description": "Delivery assignment offers and status history."
+    },
+    "/payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/PaymentRecord" },
+      "description": "Customer payment records."
+    },
+    "/settlements/{settlementId}": {
+      "schema": { "$ref": "#/entities/SettlementRecord" },
+      "description": "Seller and delivery partner settlement payouts."
+    },
+    "/payoutAccounts/{accountId}": {
+      "schema": { "$ref": "#/entities/PayoutAccount" },
+      "description": "Seller and delivery partner payout destination accounts."
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Promotional discount coupons."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Customer ratings and reviews."
+    },
+    "/complaints/{complaintId}": {
+      "schema": { "$ref": "#/entities/Complaint" },
+      "description": "Private customer complaints accessible only to the author and Super Admin."
+    },
+    "/platformSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/PlatformSettings" },
+      "description": "Global platform configuration."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Append-only admin audit logs."
+    }
+  }
+}

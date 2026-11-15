@@ -1,0 +1,6 @@
+{
+  "name": "NearbyGo",
+  "description": "Hyperlocal commerce, multi-role delivery, payment & payout governance, and Gemini AI marketplace.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
